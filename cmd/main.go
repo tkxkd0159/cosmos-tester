@@ -1,11 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"os"
-
-	sdktypes "github.com/line/lbm-sdk/types"
-	banktypes "github.com/line/lbm-sdk/x/bank/types"
 
 	"cosmo"
 )
@@ -35,12 +31,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	for _, m := range tx.GetMsgs() {
-		fmt.Println(m.String(), sdktypes.MsgTypeURL(m))
-		fmt.Printf("%#v\n", cosmo.FilterMsgs(m).(*banktypes.MsgSend).FromAddress)
-		for i := 0; i < len(m.GetSigners()); i++ {
-			fmt.Printf("Signer [%d]: %s\n", i, m.GetSigners()[i])
-		}
-	}
-	fmt.Println(tx.GetMsgs())
+	cosmo.DecodeTx(tx)
 }
