@@ -1,4 +1,4 @@
-package cosmo
+package grpc
 
 import (
 	"google.golang.org/grpc"
