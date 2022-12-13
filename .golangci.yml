@@ -1,0 +1,71 @@
+run:
+  go: '1.19'
+
+linters:
+  disable-all: true
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - containedctx
+    - contextcheck
+    - decorder
+    - depguard
+    - dogsled
+    - dupl
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forcetypeassert
+    - gochecknoglobals
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - godox
+    - goheader
+    - goimports
+    - gomnd
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - grouper
+    - importas
+    - ineffassign
+    - interfacebloat
+    - loggercheck
+    - makezero
+    - misspell
+    - nakedret
+    - nilerr
+    - nilnil
+    - noctx
+    - nolintlint
+    - nonamedreturns
+    - nosprintfhostport
+    - predeclared
+    - promlinter
+    - reassign
+    - revive
+    - staticcheck
+    - stylecheck
+    - tenv
+    - thelper
+    - tparallel
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - whitespace
+
+linters-settings:
+  gosec:
+    excludes:
+      - G107
