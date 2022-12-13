@@ -3,12 +3,12 @@ package cosmo
 import (
 	"fmt"
 
+	"cosmo/routes"
+
 	lbm "github.com/line/lbm-sdk/simapp"
 	lbmparams "github.com/line/lbm-sdk/simapp/params"
 	sdktypes "github.com/line/lbm-sdk/types"
 	banktypes "github.com/line/lbm-sdk/x/bank/types"
-
-	"cosmo/routes"
 )
 
 func LbmEnc() lbmparams.EncodingConfig {
@@ -32,7 +32,7 @@ func DecodeTx(tx sdktypes.Tx) {
 }
 
 func RouteMsgsByType(m sdktypes.Msg) any {
-	anym := m.(any)
+	anym, _ := m.(any)
 	switch anym.(type) {
 	case *banktypes.MsgSend:
 		fmt.Println("Route here", anym)

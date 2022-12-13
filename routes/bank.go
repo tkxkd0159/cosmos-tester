@@ -12,7 +12,7 @@ func (mr MsgRouter) registerBank() {
 }
 
 func handleMsgSend(sm sdktypes.Msg) bool {
-	m := sm.(*banktypes.MsgSend)
+	m, _ := sm.(*banktypes.MsgSend)
 	fmt.Println("Handle: ", m.FromAddress, m.ToAddress, m.Amount)
 	return true
 }
