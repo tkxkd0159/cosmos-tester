@@ -4,9 +4,14 @@
 아래의 옵션들 중 선택
 1. TMRPC의 `block_results`, gRPC의 `BlockByHeight`의 결과를 동시에 받아온 후 `block_results`에서 성공 tx에 대한 인덱스 거르고 실제 tx 내용은 `BlockByHeight`에서 받아서 DB에 저장
 2. Osmosis에서 pool 관련 event 리스트업 하고 `block_results`에서  `code: 0`인 success tx에 대해 내가 원하는 타겟 이벤트들 걸러서 DB에 관련 내용 저장
+
+`EmitTypedEvent`로 만들어진 이벤트의 경우 `type`이 <proto_package_name>.<message_name>
 ```shell
 # query="<type>.<attributes_key>='<attribute_value>'"
 GET https://rpc-cosmoshub.blockapsis.com/tx_search?query="coin_spent.spender='cosmos1vqem22tk25epwzu0zcjdmd8famwezy3nl3namq'"
+
+# Another query example
+"tm.Event='Tx' AND message.action=/cosmos.bank.v1.MsgSend"
 ```
 
 ## Index TX
