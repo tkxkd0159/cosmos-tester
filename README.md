@@ -17,3 +17,5 @@ GET https://rpc-cosmoshub.blockapsis.com/tx_search?query="coin_spent.spender='co
 ## Index TX
 Tendermint에서 인덱싱을 진행함. `kv`와 `psql` 두가지 방법 선택 가능. `kv`의 경우 쿼리가 제한적이고 추후 없어질 예정. `psql`의 경우 `state/indexer/sink/psql/schema.sql`을 사전에 미리 테이블 세팅해야 함.  
 `tx.height`, `tx.hash`, `block.height`의 경우 abci.Event 생성 시 Index를 true로 설정하지 않아도 자동으로 인덱싱됨. 나머지는 `Index: true` 설정해야 인덱싱 됨.
+
+TODO: 과거 데이터를 어떻게 깔끔하게 검색할 수 있을까? 외부에서 인덱싱하고 이 내용을 체인에서 검증하는 방식으로 고민 필요
