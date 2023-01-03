@@ -1,15 +1,21 @@
-package cosmo
+package codec
 
 import (
 	"fmt"
 
 	"cosmo/routes"
 
+	cosmos "github.com/cosmos/cosmos-sdk/simapp"
+	cosmosparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	lbm "github.com/line/lbm-sdk/simapp"
 	lbmparams "github.com/line/lbm-sdk/simapp/params"
 	sdktypes "github.com/line/lbm-sdk/types"
 	banktypes "github.com/line/lbm-sdk/x/bank/types"
 )
+
+func CosmosEncoder() cosmosparams.EncodingConfig {
+	return cosmos.MakeTestEncodingConfig()
+}
 
 func LbmEnc() lbmparams.EncodingConfig {
 	return lbm.MakeTestEncodingConfig()
