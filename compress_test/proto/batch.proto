@@ -1,0 +1,13 @@
+syntax = "proto3";
+package l2.batch.v1beta1;
+
+option go_package = "github.com/compress_test/types";
+
+message Batch {
+  repeated MockBlock elements = 1;
+}
+
+message MockBlock {
+  bytes header = 1;
+  repeated bytes txs = 2;
+}
