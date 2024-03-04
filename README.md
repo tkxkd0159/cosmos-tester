@@ -5,10 +5,15 @@
 1. TMRPC의 `block_results`, gRPC의 `BlockByHeight`의 결과를 동시에 받아온 후 `block_results`에서 성공 tx에 대한 인덱스 거르고 실제 tx 내용은 `BlockByHeight`에서 받아서 DB에 저장
 2. Osmosis에서 pool 관련 event 리스트업 하고 `block_results`에서  `code: 0`인 success tx에 대해 내가 원하는 타겟 이벤트들 걸러서 DB에 관련 내용 저장
 
-`EmitTypedEvent`로 만들어진 이벤트의 경우 `type`이 <proto_package_name>.<message_name>
+* `EmitTypedEvent`로 만들어진 이벤트의 경우 `type`이 <proto_package_name>.<message_name>.
+* `message.action`, `message.sender`의 경우 `baseapp.runMsgs`에서 자동 생성. `message.module`의 경우 msgHandler에서 주입하지 않은 경우 여기서 주입.
 ```shell
 # query="<type>.<attributes_key>='<attribute_value>'"
 GET https://rpc-cosmoshub.blockapsis.com/tx_search?query="coin_spent.spender='cosmos1vqem22tk25epwzu0zcjdmd8famwezy3nl3namq'"
+> https://ebony-rpc.finschia.io/tx_search?query=%22coin_spent.spender=%27tlink1ucxztrucmnxy8hhgmxte2knsz3gh7y5yzmj83s%27%22
+> https://ebony-rpc.finschia.io/tx_search?query=%22timeout_packet.packet_src_port=%27transfer%27%22
+> https://ebony-rpc.finschia.io/tx_search?query=%22message.module=%27bank%27%22
+> https://ebony-rpc.finschia.io/tx_search?query=%22message.action=%27/cosmos.bank.v1beta1.MsgSend%27%22
 
 # Another query example
 "tm.Event='Tx' AND message.action=/cosmos.bank.v1.MsgSend"
