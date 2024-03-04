@@ -15,6 +15,9 @@ GET https://rpc-cosmoshub.blockapsis.com/tx_search?query="coin_spent.spender='co
 > https://ebony-rpc.finschia.io/tx_search?query=%22message.module=%27bank%27%22
 > https://ebony-rpc.finschia.io/tx_search?query=%22message.action=%27/cosmos.bank.v1beta1.MsgSend%27%22
 
+total_count보고 pagination 가능.
+> https://rpc.testnet.osmosis.zone/tx_search?query=%22message.action=%27/ibc.applications.transfer.v1.MsgTransfer%27%22&order_by=%22desc%22&per_page=100&page=1
+
 # Another query example
 "tm.Event='Tx' AND message.action=/cosmos.bank.v1.MsgSend"
 ```
