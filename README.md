@@ -17,6 +17,8 @@ GET https://rpc-cosmoshub.blockapsis.com/tx_search?query="coin_spent.spender='co
 
 total_count보고 pagination 가능.
 > https://rpc.testnet.osmosis.zone/tx_search?query=%22message.action=%27/ibc.applications.transfer.v1.MsgTransfer%27%22&order_by=%22desc%22&per_page=100&page=1
+아니면 아래처럼 특정 높이(5744465) 이후로만 이벤트 매칭되는 것 찾을 수도 있음.
+> https://rpc.testnet.osmosis.zone/tx_search?query=%22tx.height%20%3E%205744465%20AND%20message.action=%27/ibc.applications.transfer.v1.MsgTransfer%27%22&order_by=%22asc%22&per_page=100
 
 # Another query example
 "tm.Event='Tx' AND message.action=/cosmos.bank.v1.MsgSend"
