@@ -1,4 +1,4 @@
-module cosmo/compress_test
+module cosmosor
 
 go 1.20
 

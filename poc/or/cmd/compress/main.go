@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"time"
 
+	"google.golang.org/protobuf/proto"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -25,36 +27,54 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
-	"google.golang.org/protobuf/proto"
 
-	"cosmo/compress_test/lib"
-	t "cosmo/compress_test/types"
+	"cosmosor/lib"
+	"cosmosor/types"
 )
 
 const (
-	LOAD         = 1000
 	ChainID      = "test"
 	CurrentBatch = 0
 )
 
 func main() {
 	start := time.Now()
-	batchByte := setupBatch(LOAD)
-	fmt.Println("Serialized batch size:", len(batchByte), "bytes")
-	batch := new(t.Batch)
+	batchByte := setupBatches(1000, 1000, 2)
+	fmt.Println(" * Serialized batch size:", len(batchByte), "bytes")
+	elapsed := time.Since(start)
+	fmt.Println(" * Setup took", elapsed.String())
+
+	batch := new(types.Batch)
+	start = time.Now()
 	err := proto.Unmarshal(batchByte, batch)
 	if err != nil {
 		panic(err)
 	}
-	elapsed := time.Since(start)
-	fmt.Println("Setup took", elapsed.String())
+	elapsed = time.Since(start)
+	fmt.Println(" * Unmarshal took", elapsed.String())
 }
 
-func setupBatch(n int) []byte {
-	users := make([]t.User, n)
-	for i := 0; i < n; i++ {
+func setupBatches(ntx, nblock, nbatch int) []byte {
+	batches := make([]*types.Batch, nbatch)
+	for i := 0; i < nbatch; i++ {
+		batches[i] = genBatch(ntx, nblock)
+	}
+
+	start := time.Now()
+	batchByte, err := proto.Marshal(batches[CurrentBatch])
+	if err != nil {
+		panic(err)
+	}
+	elapsed := time.Since(start)
+	fmt.Println(" * Marshal took", elapsed.String())
+	return batchByte
+}
+
+func genBatch(ntx int, nblock int) *types.Batch {
+	users := make([]types.User, ntx)
+	for i := 0; i < ntx; i++ {
 		priv, pub, addr := testdata.KeyTestPubAddr()
-		users[i] = t.User{Priv: priv, Pub: pub, Addr: addr}
+		users[i] = types.User{Priv: priv, Pub: pub, Addr: addr}
 	}
 
 	encCfg := testutil.MakeTestEncodingConfig(
@@ -63,27 +83,20 @@ func setupBatch(n int) []byte {
 		mint.AppModuleBasic{}, slashing.AppModuleBasic{}, staking.AppModuleBasic{}, upgrade.AppModuleBasic{}, vesting.AppModuleBasic{})
 	txBuilder := encCfg.TxConfig.NewTxBuilder()
 
-	txs := make([][]byte, n)
-	blocks := make([]*t.MockBlock, LOAD)
-	batches := make([]*t.Batch, 0)
+	txs := make([][]byte, ntx)
+	blocks := make([]*types.MockBlock, nblock)
 	var err error
 	for i, u := range users {
-		txs[i], err = genTx(txBuilder, encCfg.TxConfig, u, users[(i+1)%len(users)]) // 1 ~ 5ms
+		txs[i], err = genTx(txBuilder, encCfg.TxConfig, u, users[(i+1)%len(users)])
 		if err != nil {
 			panic(err)
 		}
-		blocks[i] = &t.MockBlock{Txs: [][]byte{txs[i]}}
+		blocks[i] = &types.MockBlock{Txs: [][]byte{txs[i]}}
 	}
-	batches = append(batches, &t.Batch{Elements: blocks})
-
-	batchByte, err := proto.Marshal(batches[CurrentBatch])
-	if err != nil {
-		panic(err)
-	}
-	return batchByte
+	return &types.Batch{Elements: blocks}
 }
 
-func genTx(b client.TxBuilder, txCfg client.TxConfig, from, to t.User) ([]byte, error) {
+func genTx(b client.TxBuilder, txCfg client.TxConfig, from, to types.User) ([]byte, error) {
 	err := b.SetMsgs(banktypes.NewMsgSend(from.Addr, to.Addr, sdk.NewCoins(sdk.NewCoin("test", sdk.NewInt(rand.Int63n(100000))))))
 	if err != nil {
 		return nil, err
